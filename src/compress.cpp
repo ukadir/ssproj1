@@ -13,7 +13,41 @@
 
 /* TODO: add pseudo compression with ascii encoding and naive header
  * (checkpoint) */
-void pseudoCompression(const string& inFileName, const string& outFileName) {}
+void pseudoCompression(const string& inFileName, const string& outFileName) {
+    ifstream inFile;
+    ofstream outFile;
+
+    vector<unsigned int> freqs(256, 0);
+
+    inFile.open(inFileName, ios::binary);
+    outFile.open(outFileName);
+
+    unsigned char nextChar = inFile.get();
+    while (nextChar != 255) {  // EOF BIT!!
+        freqs[nextChar]++;
+        nextChar = inFile.get();
+    }
+
+    HCTree* tree = new HCTree();
+    tree->build(freqs);
+
+    for (int i = 0; i < 256; i++) {
+        outFile << freqs[i] << "\n";
+    }
+
+    inFile.close();
+    inFile.open(inFileName, ios::binary);
+    nextChar = inFile.get();
+    // cout << "after nextChar" << endl;
+    while (nextChar != 255) {  // EOF BIT!!
+        tree->encode(nextChar, outFile);
+        // cout << "after encode" << endl;
+        nextChar = inFile.get();
+    }
+
+    inFile.close();
+    outFile.close();
+}
 
 /* TODO: True compression with bitwise i/o and small header (final) */
 void trueCompression(const string& inFileName, const string& outFileName) {}

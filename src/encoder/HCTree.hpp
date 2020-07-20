@@ -5,7 +5,7 @@
 #include <queue>
 #include <vector>
 // #include "BitInputStream.hpp"
-// #include "BitOutputStream.hpp"
+#include "../bitStream/output/BitOutputStream.hpp"
 #include "HCNode.hpp"
 
 using namespace std;
@@ -17,9 +17,16 @@ class HCTree {
 
   public:
     /* TODO: Initializes a new empty HCTree.*/
-    HCTree() {}
+    HCTree() {
+        root = NULL;
+        for (int i = 0; i < 256; i++) {
+            leaves.push_back(NULL);
+        }
+    }
 
     ~HCTree();
+
+    HCNode* returnRoot();
 
     void build(const vector<unsigned int>& freqs);
 

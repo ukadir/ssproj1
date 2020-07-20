@@ -21,6 +21,8 @@ class HCNode {
     HCNode(unsigned int count, byte symbol, HCNode* c0 = 0, HCNode* c1 = 0,
            HCNode* p = 0)
         : count(count), symbol(symbol), c0(c0), c1(c1), p(p) {}
+
+    void rDelete();
 };
 
 /* For printing an HCNode to an ostream. Possibly useful for debugging */
@@ -36,6 +38,12 @@ ostream& operator<<(ostream& stm, const HCNode& n) {
  */
 struct HCNodePtrComp {
     /* TODO */
-    bool operator()(HCNode*& lhs, HCNode*& rhs) const { return false; }
+    bool operator()(HCNode*& lhs, HCNode*& rhs) const {
+        if (lhs->count == rhs->count) {
+            return (lhs->symbol < rhs->symbol);
+        }
+
+        return (lhs->count > rhs->count);
+    }
 };
 #endif  // HCNODE_HPP

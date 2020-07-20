@@ -13,7 +13,35 @@
 
 /* TODO: Pseudo decompression with ascii encoding and naive header (checkpoint)
  */
-void pseudoDecompression(const string& inFileName, const string& outFileName) {}
+void pseudoDecompression(const string& inFileName, const string& outFileName) {
+    ifstream inFile;
+    ofstream outFile;
+
+    vector<unsigned int> freqs(256, 0);
+
+    inFile.open(inFileName, ios::binary);
+    outFile.open(outFileName);
+
+    char line[256];
+    for (int lines = 1; lines <= 256; lines++) {
+        inFile.getline(line, 256);
+        freqs[lines - 1] = stoi(line);
+    }
+
+    HCTree* tree = new HCTree();
+    tree->build(freqs);
+
+    unsigned char nextChar;
+    nextChar = inFile.peek();
+    while (nextChar != 255) {
+        // cout << "nextChar: " << nextChar << endl;
+        outFile << tree->decode(inFile);
+        nextChar = inFile.peek();
+    }
+
+    inFile.close();
+    outFile.close();
+}
 
 /* TODO: True decompression with bitwise i/o and small header (final) */
 void trueDecompression(const string& inFileName, const string& outFileName) {}
